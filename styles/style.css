@@ -1,0 +1,7 @@
+.dryh.sheet.actor { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+.dryh .sheet-body { display: flex; gap: 1rem; padding: 0.8rem; }
+.dryh .left-column { flex: 1 1 50%; }
+.dryh .right-column { flex: 1 1 50%; }
+.dryh label { display:block; margin-bottom:0.6rem; }
+.dryh input[type="text"], .dryh input[type="number"], .dryh textarea { width: 100%; box-sizing: border-box; padding: 0.3rem; }
+.dryh .sheet-controls { margin-top: 1rem; display:flex; gap:0.5rem; }

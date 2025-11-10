@@ -19,7 +19,7 @@
   "download": "https://github.com/amari-darey/dont-rest-your-head/archive/refs/heads/main.zip",
 
   "scripts": ["scripts/actor-sheet.js"],
-  "styles": ["styles/style.css"],
+  "styles": ["style.css"],
 
   "packs": [],
   "languages": [
