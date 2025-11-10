@@ -1,0 +1,18 @@
+{
+"name": "dont-rest-your-head",
+"title": "Don't Rest Your Head",
+"description": "Don't Rest Your Head. You can’t sleep. It started like that for all of us, back when we were garden variety insomniacs. Maybe you had nightmares (God knows we all do now), or maybe you just had problems that wouldn’t let you sleep. Hell, maybe you were just over-caffienated. But then something clicked.",
+"version": "0.1.0",
+"authors": [
+{
+"name": "Amari",
+"url": "",
+"email": ""
+}
+],
+"minimumCoreVersion": "11",
+"compatibleCoreVersion": "11",
+"scripts": ["scripts/actor-sheet.js"],
+"styles": ["styles/style.css"],
+"packs": []
+}

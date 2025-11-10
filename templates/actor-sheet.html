@@ -1,0 +1,99 @@
+<form class="sheet actor" data-actor-id="{{actor.id}}">
+<header class="sheet-header">
+<h1>{{actor.name}}</h1>
+</header>
+
+
+<div class="sheet-body">
+
+
+<section class="left-column">
+<h2>Основное</h2>
+<label>Меня зовут:
+<input name="name" type="text" value="{{actor.name}}">
+</label>
+
+
+<label>и я —:
+<input name="data.info.role" type="text" value="{{actor.data.data.info.role}}">
+</label>
+
+
+<label>Что не дает мне уснуть?:
+<textarea name="data.info.whatKeepsMeUp">{{actor.data.data.info.whatKeepsMeUp}}</textarea>
+</label>
+
+
+<label>Что случилось только что?:
+<textarea name="data.info.whatJustHappened">{{actor.data.data.info.whatJustHappened}}</textarea>
+</label>
+
+
+<label>Какой я снаружи?:
+<textarea name="data.info.appearance">{{actor.data.data.info.appearance}}</textarea>
+</label>
+
+
+<label>Кто я на самом деле?:
+<textarea name="data.info.whoIReallyAm">{{actor.data.data.info.whoIReallyAm}}</textarea>
+</label>
+
+
+<label>Каков мой путь?:
+<textarea name="data.info.path">{{actor.data.data.info.path}}</textarea>
+</label>
+</section>
+
+
+<section class="right-column">
+<h2>Характеристики</h2>
+
+
+<label>Дисциплина (0–3):
+<input name="data.attributes.discipline" type="number" min="0" max="3" value="{{actor.data.data.attributes.discipline}}">
+</label>
+
+
+<label>Безумие (0–3):
+<input name="data.attributes.madness" type="number" min="0" max="3" value="{{actor.data.data.attributes.madness}}">
+</label>
+
+
+<label>Истощение (0–6):
+<input name="data.attributes.exhaustion" type="number" min="0" max="6" value="{{actor.data.data.attributes.exhaustion}}">
+</label>
+
+
+<h3>Реакции</h3>
+<label>Бей (0–3):
+<input name="data.reactions.hit" type="number" min="0" max="3" value="{{actor.data.data.reactions.hit}}">
+</label>
+
+
+<label>Беги (0–3):
+<input name="data.reactions.flee" type="number" min="0" max="3" value="{{actor.data.data.reactions.flee}}">
+</label>
+
+
+<h3>Способности</h3>
+<label>Навык Безумия:
+<input name="data.skills.madness" type="text" value="{{actor.data.data.skills.madness}}">
+</label>
+
+
+<label>Навык Истощения:
+<input name="data.skills.exhaustion" type="text" value="{{actor.data.data.skills.exhaustion}}">
+</label>
+
+
+<div class="sheet-controls">
+<button type="submit">Сохранить</button>
+<button class="btn-reset-exhaustion" type="button">Сбросить истощение</button>
+</div>
+
+
+</section>
+
+
+</div>
+</form>
