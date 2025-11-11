@@ -1,0 +1,13 @@
+{
+    "Actor": {
+        "types": [
+            "Awake",
+            "Nightmares"
+        ]
+    },
+    "Item": {
+        "types": [
+            "item"
+        ]
+    }
+}
