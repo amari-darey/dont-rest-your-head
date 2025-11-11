@@ -7,11 +7,12 @@
   "version": 0.01, 
   "minimumCoreVersion": "11",
   "compatibleCoreVersion": "11",
-  "scripts": [
-    "scripts/actor-sheet.js"
+  "esmodules": [
+    "scripts/dryhe.js",
+    "scripts/item-sheet.js"
   ],
-  "style": [
-    "styles/style"
+  "styles": [
+    "style.css"
   ],
   "gridDistance": 5,
   "gridUnits": "ft",

@@ -1,7 +1,34 @@
-.dryh.sheet.actor { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
-.dryh .sheet-body { display: flex; gap: 1rem; padding: 0.8rem; }
-.dryh .left-column { flex: 1 1 50%; }
-.dryh .right-column { flex: 1 1 50%; }
-.dryh label { display:block; margin-bottom:0.6rem; }
-.dryh input[type="text"], .dryh input[type="number"], .dryh textarea { width: 100%; box-sizing: border-box; padding: 0.3rem; }
-.dryh .sheet-controls { margin-top: 1rem; display:flex; gap:0.5rem; }
+.dryh-sheet { background: linear-gradient(180deg,#0b0b0b 0%, #121212 60%); color: #e6e6e6; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; border: 1px solid rgba(255,255,255,0.04); box-shadow: 0 6px 30px rgba(0,0,0,0.7); padding: 0; }
+.dryh-sheet .sheet-header { display:flex; align-items:center; gap:16px; padding:18px; border-bottom:1px solid rgba(255,255,255,0.03); background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0)); }
+.dryh-sheet .avatar { width:96px; height:96px; border-radius:8px; object-fit:cover; border:1px solid rgba(255,255,255,0.04); box-shadow:0 4px 18px rgba(0,0,0,0.6); }
+.dryh-sheet .title-text { display:flex; flex-direction:column; gap:8px; }
+.dryh-sheet .actor-name { background:transparent; border:none; color:#fff; font-size:20px; font-weight:700; outline:none; width:420px; }
+.dryh-sheet .subrole input { background:transparent; border:1px dashed rgba(255,255,255,0.04); padding:6px 8px; color:#bdbdbd; width:420px; border-radius:6px; }
+.dryh-sheet .sheet-body { display:flex; gap:20px; padding:20px; }
+.dryh-sheet .left-column { flex:1; display:flex; flex-direction:column; gap:12px; }
+.dryh-sheet .right-column { width:420px; display:flex; flex-direction:column; gap:12px; }
+.dryh-sheet h3 { margin:0 0 8px 0; color:#f3f3f3; font-size:16px; letter-spacing:0.6px; }
+.dryh-sheet .field { display:flex; flex-direction:column; gap:6px; }
+.dryh-sheet .field .label { font-size:12px; color:#9e9e9e; }
+.dryh-sheet textarea { width:100%; min-height:58px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); color:#eaeaea; padding:10px; border-radius:8px; resize:vertical; }
+.dryh-sheet input[type="text"] { background:rgba(255,255,255,0.01); border:1px solid rgba(255,255,255,0.03); color:#eaeaea; padding:8px; border-radius:6px; }
+.dryh-sheet .stats { display:flex; flex-direction:column; gap:12px; }
+.dryh-sheet .stat-block { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.dryh-sheet .stat-name { font-weight:600; width:120px; color:#ddd; }
+.dryh-sheet .dots { display:flex; gap:8px; align-items:center; }
+.dryh-sheet .dot { display:inline-flex; align-items:center; justify-content:center; }
+.dryh-sheet .dot input { display:none; }
+.dryh-sheet .dot span { width:22px; height:22px; border-radius:50%; display:inline-block; background:transparent; border:1px solid rgba(255,255,255,0.06); box-shadow: inset 0 -2px 6px rgba(0,0,0,0.6); transition:all 0.14s ease; }
+.dryh-sheet .dot input:checked + span { background:linear-gradient(180deg,#ff6b6b 0%, #c43131 100%); box-shadow:0 6px 18px rgba(196,49,49,0.18); border-color:rgba(255,255,255,0.06); transform:scale(1.03); }
+.dryh-sheet .dot span::after { content:''; display:block; width:100%; height:100%; border-radius:50%; opacity:0; transition:opacity .12s; }
+.dryh-sheet .exhaustion .dot span { width:18px; height:18px; }
+.dryh-sheet .reaction { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:6px; }
+.dryh-sheet .controls { margin-top:8px; display:flex; gap:8px; align-items:center; }
+.dryh-sheet .btn-reset-exhaustion { background:transparent; border:1px solid rgba(255,255,255,0.06); color:#f1f1f1; padding:6px 10px; border-radius:6px; cursor:pointer; }
+.dryh-sheet .small input { width:100%; }
+.dryh-sheet .sheet-footer { display:flex; justify-content:flex-end; padding:12px 20px; border-top:1px solid rgba(255,255,255,0.03); }
+.dryh-sheet .save { background:linear-gradient(180deg,#1f1f1f,#111); color:#fff; border:1px solid rgba(255,255,255,0.04); padding:8px 14px; border-radius:8px; cursor:pointer; }
+@media (max-width:900px) {
+.dryh-sheet .sheet-body { flex-direction:column; }
+.dryh-sheet .right-column { width:100%; }
+}

@@ -3,11 +3,49 @@
         "types": [
             "Awake",
             "Nightmares"
-        ]
+        ],
+        "templates": {
+            "commonStats": {
+                "discipline": {
+                    "value": 0,
+                    "max": 3
+                },
+                "madness": {
+                    "value": 0,
+                    "max": 3
+                },
+                "exhaustion": {
+                    "value": 0,
+                    "max": 6
+                },
+                "reactionHit": {
+                    "value": 0,
+                    "max": 3
+                },
+                "reactionsFlee": {
+                    "value": 0,
+                    "max": 3
+                },
+                "scars": {
+                    "value": 0,
+                    "max": 3
+                }
+            }
+        },
+        "Awake": {
+            "templates": ["commonStats"]
+        },
+        "Nightmares": {
+            "dice-poll": 0
+        }
     },
     "Item": {
         "types": [
             "item"
-        ]
+        ],
+        "item": {
+            "name": "",
+            "description": ""
+        }
     }
 }
