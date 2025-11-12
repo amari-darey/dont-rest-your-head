@@ -1,12 +1,25 @@
 <form class="sheet actor dryh-sheet" data-actor-id="{{actor.id}}">
-
-    <style>
+  <style>
     .dryh-sheet { background: linear-gradient(180deg,#0b0b0b 0%, #121212 60%); color: #e6e6e6; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; border: 1px solid rgba(255,255,255,0.04); box-shadow: 0 6px 30px rgba(0,0,0,0.7); padding: 0; }
     .dryh-sheet .sheet-header { display:flex; align-items:center; gap:16px; padding:18px; border-bottom:1px solid rgba(255,255,255,0.03); background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0)); }
     .dryh-sheet .avatar { width:96px; height:96px; border-radius:8px; object-fit:cover; border:1px solid rgba(255,255,255,0.04); box-shadow:0 4px 18px rgba(0,0,0,0.6); }
     .dryh-sheet .title-text { display:flex; flex-direction:column; gap:8px; }
     .dryh-sheet .actor-name { background:transparent; border:none; color:#fff; font-size:20px; font-weight:700; outline:none; width:420px; }
     .dryh-sheet .subrole input { background:transparent; border:1px dashed rgba(255,255,255,0.04); padding:6px 8px; color:#bdbdbd; width:420px; border-radius:6px; }
+    .dryh-sheet .dice-roll-section { background: rgba(30,30,30,0.7); border-radius:12px; padding:20px; margin:16px; border:1px solid rgba(255,255,255,0.05); box-shadow:0 4px 20px rgba(0,0,0,0.4); }
+    .dryh-sheet .dice-controls { display:flex; flex-wrap:wrap; gap:15px; align-items:center; margin-top:12px; }
+    .dryh-sheet .dice-control { display:flex; flex-direction:column; gap:6px; min-width:120px; }
+    .dryh-sheet .dice-control label { font-size:13px; color:#9e9e9e; }
+    .dryh-sheet .dice-control select { background:rgba(20,20,20,0.8); border:1px solid rgba(235, 235, 235, 0.06); color:#e0e0e0; padding:2px 4px; border-radius:6px; width:100%; }
+    .dryh-sheet .dice-control select option {
+          background: #1a1a1a;
+          color: #e0e0e0;
+          font-size: 14px;
+          padding: 4px 8px;
+        }
+    .dryh-sheet .btn-roll { background:linear-gradient(135deg, #ff4757 0%, #c43131 100%); border:none; color:white; padding:10px 20px; border-radius:8px; font-weight:bold; cursor:pointer; transition:all 0.2s ease; box-shadow:0 4px 15px rgba(196,49,49,0.4); }
+    .dryh-sheet .btn-roll:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(196,49,49,0.6); }
+    .dryh-sheet .dice-formula { font-family:monospace; color:#4da6ff; font-size:14px; background:rgba(0,0,0,0.3); padding:4px 8px; border-radius:6px; margin-top:8px; }
     .dryh-sheet .sheet-body { display:flex; gap:20px; padding:20px; }
     .dryh-sheet .left-column { flex:1; display:flex; flex-direction:column; gap:12px; }
     .dryh-sheet .right-column { width:420px; display:flex; flex-direction:column; gap:12px; }
@@ -30,36 +43,52 @@
     .dryh-sheet .btn-reset-exhaustion { background:transparent; border:1px solid rgba(255,255,255,0.06); color:#f1f1f1; padding:6px 10px; border-radius:6px; cursor:pointer; }
     .dryh-sheet .small input { width:100%; }
     .dryh-sheet .sheet-footer { display:flex; justify-content:flex-end; padding:12px 20px; border-top:1px solid rgba(255,255,255,0.03); }
-    .dryh-sheet .save { background:linear-gradient(180deg,#1f1f1f,#111); color:#fff; border:1px solid rgba(255,255,255,0.04); padding:8px 14px; border-radius:8px; cursor:pointer; }
     @media (max-width:900px) {
-    .dryh-sheet .sheet-body { flex-direction:column; }
-    .dryh-sheet .right-column { width:100%; }
-    }    
-    </style>
+      .dryh-sheet .sheet-body { flex-direction:column; }
+      .dryh-sheet .right-column { width:100%; }
+      .dryh-sheet .dice-controls { flex-direction:column; }
+    }
+  </style>
+
   <header class="sheet-header">
-    <div class="title-wrap">
-      <img class="avatar" src="{{actor.img}}" alt="avatar" />
-
-      <div class="title-text">
-        <input
-          name="name"
-          class="actor-name"
-          type="text"
-          value="{{actor.name}}"
-          placeholder="Имя персонажа"
-        />
-
-        <div class="subrole">
-          <input
-            name="data.info.role"
-            type="text"
-            value="{{actor.data.data.info.role}}"
-            placeholder="и я —:"
-          />
-        </div>
+    <img class="avatar" src="{{actor.img}}" alt="avatar" data-edit="img" />
+    <div class="title-text">
+      <input name="name" class="actor-name" type="text" value="{{actor.name}}" placeholder="Имя персонажа" />
+      <div class="subrole">
+        <input name="system.info.role" type="text" value="{{actor.system.info.role}}" placeholder="и я —:" />
       </div>
+      <div class="awake-button-slot"></div>
     </div>
   </header>
+
+  <div class="dice-roll-section">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <strong style="color:#ff4757; font-size:16px;">Бросок кубов</strong>
+      <div class="dice-formula" id="dice-formula">d6 × {{actor.system.attributes.discipline}} + {{actor.system.attributes.exhaustion}} + {{actor.system.attributes.madness}}</div>
+    </div>
+    <div class="dice-controls">
+      <div class="dice-control">
+        <label for="madness-dice">Доп. кубики Безумия (1-6)</label>
+        <select id="madness-dice" name="madness-dice">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+      </div>
+      <div class="dice-control">
+        <label for="exhaustion-dice">Доп. кубик Истощения (0-1)</label>
+        <select id="exhaustion-dice" name="exhaustion-dice">
+          <option value="0">0</option>
+          <option value="1">1</option>
+        </select>
+      </div>
+      <button type="button" class="btn-roll" data-action="roll-dice">Бросить кубы</button>
+    </div>
+  </div>
 
   <div class="sheet-body">
     <section class="left-column">
@@ -68,13 +97,11 @@
       <label class="field">
         <span class="label">Что не дает мне уснуть?</span>
         <textarea name="system.info.whatKeepsMeUp" rows="3">{{actor.system.info.whatKeepsMeUp}}</textarea>
-
       </label>
 
       <label class="field">
         <span class="label">Что случилось только что?</span>
         <textarea name="system.info.whatJustHappened" rows="3">{{actor.system.info.whatJustHappened}}</textarea>
-
       </label>
 
       <label class="field">
@@ -131,10 +158,10 @@
             </label>
             {{/each}}
           </div>
+        </div>
 
-          <div class="controls">
-            <button class="btn-reset-exhaustion" type="button">Сбросить</button>
-          </div>
+        <div class="controls">
+          <button type="button" class="btn-reset-exhaustion" data-action="reset-exhaustion">Сбросить истощение</button>
         </div>
 
         <h3>Реакции</h3>
@@ -167,29 +194,15 @@
 
         <label class="field small">
           <span class="label">Навык Безумия</span>
-          <input
-            name="data.skills.madness"
-            type="text"
-            value="{{actor.data.data.skills.madness}}"
-            placeholder="Навык Безумия"
-          />
+          <input name="system.skills.madness" type="text" value="{{actor.system.skills.madness}}" placeholder="Навык Безумия" />
         </label>
 
         <label class="field small">
           <span class="label">Навык Истощения</span>
-          <input
-            name="data.skills.exhaustion"
-            type="text"
-            value="{{actor.data.data.skills.exhaustion}}"
-            placeholder="Навык Истощения"
-          />
+          <input name="system.skills.exhaustion" type="text" value="{{actor.system.skills.exhaustion}}" placeholder="Навык Истощения" />
         </label>
       </div>
     </section>
   </div>
-
-  <footer class="sheet-footer">
-    <button type="submit" class="save">Сохранить</button>
-  </footer>
 </form>
 
