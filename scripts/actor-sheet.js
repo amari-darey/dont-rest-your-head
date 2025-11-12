@@ -1,7 +1,7 @@
 export default class DryhActorSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["dryh", "sheet", "actor"],
+      classes: ["dryh", "sheet", "actor", "dryh-sheet"],
       template: "systems/dryh/templates/actor-sheet.html",
       width: 920,
       height: 760,
@@ -43,11 +43,6 @@ export default class DryhActorSheet extends ActorSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
-    html.find(".btn-reset-exhaustion").click(async ev => {
-      ev.preventDefault();
-      await this.object.update({ "system.attributes.exhaustion": 0 });
-    });
-
     const slot = html.find(".awake-button-slot");
     if (!this.actor.system.awakened && slot.length && slot.find(".btn-awaken").length === 0) {
       const btn = $(
@@ -60,6 +55,28 @@ export default class DryhActorSheet extends ActorSheet {
 
     html.on("click", "[data-action='roll-dice']", () => this._rollDice());
     html.on("click", ".btn-awaken", () => this._startAwakening());
+    
+    html.on("click", ".avatar", this._onEditImage.bind(this));
+  }
+
+  async _onEditImage(event) {
+    event.preventDefault();
+    const fp = new FilePicker({
+      type: "image",
+      current: this.actor.img,
+      callback: async (path) => {
+        await this.actor.update({ img: path });
+        await this._syncTokensWithActorImage();
+      }
+    });
+    return fp.browse();
+  }
+
+  async _syncTokensWithActorImage() {
+    const tokens = this.actor.getActiveTokens();
+    for (const token of tokens) {
+      await token.document.update({ img: this.actor.img });
+    }
   }
 
   async _rollDice() {
@@ -139,6 +156,10 @@ export default class DryhActorSheet extends ActorSheet {
       dominantPool = "Дисциплина";
     }
 
+    if (game.dice3d) {
+        await game.dice3d.showForRoll(roll, game.user, !roll.isPrivate, null, false);
+    }
+
     const messageContent = `
       <div style="background:linear-gradient(135deg,#1a1a1a 0%,#0d0d0d 100%);padding:15px;border-radius:10px;color:#e0e0e0;font-family:Inter,sans-serif;">
         <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
@@ -169,8 +190,8 @@ export default class DryhActorSheet extends ActorSheet {
     });
 
     const updates = {};
-    if (madnessDice > 0) updates["system.attributes.madness"] = Math.min(3, madness + madnessDice);
-    if (exhaustionDice > 0) updates["system.attributes.exhaustion"] = Math.min(6, exhaustion + exhaustionDice);
+    if (madnessDice > 0) updates["system.attributes.madness"] = Math.min(3, (this.actor.system.attributes.madness ?? 0) + 1);
+    if (exhaustionDice > 0) updates["system.attributes.exhaustion"] = Math.min(6, (this.actor.system.attributes.exhaustion ?? 0) + 1);
 
     if (Object.keys(updates).length > 0) {
       await this.actor.update(updates);
