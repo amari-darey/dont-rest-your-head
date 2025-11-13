@@ -116,7 +116,7 @@ export default class DryhActorSheet extends ActorSheet {
     `;
 
     const baseStyles = {
-      discipline: "width:40px;height:40px;border-radius:8px;background:rgba(200,200,200,0.8);display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px;box-shadow:0 4px 8px rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.2);",
+      discipline: "width:40px;height:40px;border-radius:8px;background:rgba(200,200,200,0.8);display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px;box-shadow:0 4px 8px rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.2);",
       madness: "width:40px;height:40px;border-radius:8px;background:rgba(220,50,50,0.8);display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px;box-shadow:0 4px 8px rgba(0,0,0,0.3);border:1px solid rgba(255,0,0,0.3);",
       exhaustion: "width:40px;height:40px;border-radius:8px;background:rgba(30,30,30,0.9);display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px;color:#e0e0e0;box-shadow:0 4px 8px rgba(0,0,0,0.5);border:1px solid rgba(0,0,0,0.5);"
     };
