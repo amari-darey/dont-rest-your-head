@@ -4,6 +4,15 @@
 .dryh-sheet .title-text { display:flex; flex-direction:column; gap:8px; }
 .dryh-sheet .actor-name { background:transparent; border:none; color:#fff; font-size:20px; font-weight:700; outline:none; width:420px; }
 .dryh-sheet .subrole input { background:transparent; border:1px dashed rgba(255,255,255,0.04); padding:6px 8px; color:#bdbdbd; width:420px; border-radius:6px; }
+.dryh-sheet .dryh-dice-roll-section { background: rgba(30,30,30,0.7); border-radius:12px; padding:20px; margin:16px; border:1px solid rgba(255,255,255,0.05); box-shadow:0 4px 20px rgba(0,0,0,0.4); }
+.dryh-sheet .dryh-dryh-dice-controls { display:flex; flex-wrap:wrap; gap:15px; align-items:center; margin-top:12px; }
+.dryh-sheet .dryh-dice-control { display:flex; flex-direction:column; gap:6px; min-width:120px; }
+.dryh-sheet .dryh-dice-control label { font-size:13px; color:#9e9e9e; }
+.dryh-sheet .dryh-dice-control select { background:rgba(20,20,20,0.8); border:1px solid rgba(235, 235, 235, 0.06); color:#e0e0e0; padding:2px 4px; border-radius:6px; width:100%; }
+.dryh-sheet .dryh-dice-control select option { background: #1a1a1a; color: #e0e0e0; font-size: 14px; padding: 4px 8px; }
+.dryh-sheet .dryh-btn-roll { background:linear-gradient(135deg, #ff4757 0%, #c43131 100%); border:none; color:white; padding:10px 20px; border-radius:8px; font-weight:bold; cursor:pointer; transition:all 0.2s ease; box-shadow:0 4px 15px rgba(196,49,49,0.4); }
+.dryh-sheet .dryh-btn-roll:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(196,49,49,0.6); }
+.dryh-sheet .dice-formula { font-family:monospace; color:#4da6ff; font-size:14px; background:rgba(0,0,0,0.3); padding:4px 8px; border-radius:6px; margin-top:8px; }
 .dryh-sheet .sheet-body { display:flex; gap:20px; padding:20px; }
 .dryh-sheet .left-column { flex:1; display:flex; flex-direction:column; gap:12px; }
 .dryh-sheet .right-column { width:420px; display:flex; flex-direction:column; gap:12px; }
@@ -27,8 +36,8 @@
 .dryh-sheet .btn-reset-exhaustion { background:transparent; border:1px solid rgba(255,255,255,0.06); color:#f1f1f1; padding:6px 10px; border-radius:6px; cursor:pointer; }
 .dryh-sheet .small input { width:100%; }
 .dryh-sheet .sheet-footer { display:flex; justify-content:flex-end; padding:12px 20px; border-top:1px solid rgba(255,255,255,0.03); }
-.dryh-sheet .save { background:linear-gradient(180deg,#1f1f1f,#111); color:#fff; border:1px solid rgba(255,255,255,0.04); padding:8px 14px; border-radius:8px; cursor:pointer; }
 @media (max-width:900px) {
-.dryh-sheet .sheet-body { flex-direction:column; }
-.dryh-sheet .right-column { width:100%; }
+    .dryh-sheet .sheet-body { flex-direction:column; }
+    .dryh-sheet .right-column { width:100%; }
+    .dryh-sheet .dryh-dryh-dice-controls { flex-direction:column; }
 }
