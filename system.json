@@ -12,12 +12,14 @@
     "scripts/item-sheet.js"
   ],
   "styles": [
-    "style.css"
+    {
+      "src":"styles/style.css"
+    }
   ],
   "gridDistance": 5,
   "gridUnits": "ft",
-  "primaryTokenAttrribute": "exhaustion",
-  "secondaryTokemAttribute": "madness",
+  "primaryTokenAttribute": "exhaustion",
+  "secondaryTokenAttribute": "madness",
   "initiative": "1d6 + @discipline"
 }
 

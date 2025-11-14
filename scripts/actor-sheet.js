@@ -3,8 +3,10 @@ export default class DryhActorSheet extends ActorSheet {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["dryh", "sheet", "actor", "dryh-sheet"],
       template: "systems/dryh/templates/actor-sheet.html",
-      width: 920,
-      height: 760,
+      width: 950,
+      height: 850,
+      resizable: true,
+      minimizable: true,
       tabs: [{ nav: ".sheet-tabs", content: ".sheet-body", initial: "main" }]
     });
   }
@@ -43,18 +45,8 @@ export default class DryhActorSheet extends ActorSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
-    const slot = html.find(".awake-button-slot");
-    if (!this.actor.system.awakened && slot.length && slot.find(".btn-awaken").length === 0) {
-      const btn = $(
-        `<button class="btn-awaken" type="button" style="margin-top:8px;padding:12px 18px;border-radius:8px;font-size:16px; color: red;">
-          Пробудиться
-         </button>`
-      );
-      slot.append(btn);
-    }
-
     html.on("click", "[data-action='roll-dice']", () => this._rollDice());
-    html.on("click", ".btn-awaken", () => this._startAwakening());
+    html.on("click", ".dryh-awake-status", () => this._startAwakening());
     
     html.on("click", ".avatar", this._onEditImage.bind(this));
   }
@@ -244,6 +236,12 @@ export default class DryhActorSheet extends ActorSheet {
           continue;
         } else if (err === "cancelled" || err === "closed") {
           ui.notifications.warn("Создание персонажа отменено");
+          
+          const awakeStatus = this.element.find('.dryh-awake-status');
+          if (awakeStatus.length) {
+            awakeStatus.removeClass('awakened');
+          }
+          
           return;
         }
         throw err;
@@ -264,8 +262,21 @@ export default class DryhActorSheet extends ActorSheet {
       "system.reactions.flee": answers.reactions.flee,
       "system.attributes.discipline": 3,
       "system.attributes.exhaustion": 0,
+      "system.attributes.madness": 0,
       "system.awakened": true
     });
+
+    const awakeStatus = this.element.find('.dryh-awake-status');
+    if (awakeStatus.length) {
+      awakeStatus.addClass('awakened');
+      awakeStatus.prop('title', 'Персонаж пробужден');
+      awakeStatus.css('cursor', 'default');
+    }
+
+    const awakeButtonSlot = this.element.find('.awake-button-slot');
+    if (awakeButtonSlot.length) {
+      awakeButtonSlot.empty();
+    }
 
     this.render();
     ui.notifications.info("Персонаж пробужден.");

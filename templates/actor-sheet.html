@@ -1,34 +1,35 @@
 <form class="sheet actor dryh-sheet" data-actor-id="{{actor.id}}">
-  <style>
-    .dryh-sheet .dryh-dice-roll-section { background: rgba(30,30,30,0.7); border-radius:12px; padding:20px; margin:16px; border:1px solid rgba(255,255,255,0.05); box-shadow:0 4px 20px rgba(0,0,0,0.4); }
-    .dryh-sheet .dryh-dryh-dice-controls { display:flex; flex-wrap:wrap; gap:15px; align-items:center; margin-top:12px; }
-    .dryh-sheet .dryh-dice-control { display:flex; flex-direction:column; gap:6px; min-width:120px; }
-    .dryh-sheet .dryh-dice-control label { font-size:13px; color:#9e9e9e; }
-    .dryh-sheet .dryh-dice-control select { background:rgba(20,20,20,0.8); border:1px solid rgba(235, 235, 235, 0.06); color:#e0e0e0; padding:2px 4px; border-radius:6px; width:100%; }
-    .dryh-sheet .dryh-dice-control select option { background: #1a1a1a; color: #e0e0e0; font-size: 14px; padding: 4px 8px; }
-    .dryh-sheet .dryh-btn-roll { background:linear-gradient(135deg, #ff4757 0%, #c43131 100%); border:none; color:white; padding:10px 20px; border-radius:8px; font-weight:bold; cursor:pointer; transition:all 0.2s ease; box-shadow:0 4px 15px rgba(196,49,49,0.4); }
-    .dryh-sheet .dryh-btn-roll:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(196,49,49,0.6); }
-  </style>
-
-  <header class="sheet-header">
-    <img class="avatar" src="{{actor.img}}" alt="avatar" data-edit="img" />
-    <div class="title-text">
-      <input name="name" class="actor-name" type="text" value="{{actor.name}}" placeholder="Имя персонажа" />
-      <div class="subrole">
-        <input name="system.info.role" type="text" value="{{actor.system.info.role}}" placeholder="и я —:" />
+  <header class="dryh-sheet-header">
+    <div class="dryh-avatar-container">
+      <img class="dryh-avatar" src="{{actor.img}}" alt="avatar" data-edit="img" />
+    </div>
+    <div class="dryh-title-text">
+      <div class="dryh-actor-name-container">
+        <input name="name" class="dryh-actor-name" type="text" value="{{actor.name}}" placeholder="Имя персонажа" />
+        <div class="dryh-awake-status" title="Статус бодрствования"></div>
       </div>
-      <div class="awake-button-slot"></div>
+      <div class="dryh-subrole"> И я: <input name="system.info.role" type="text" value="{{actor.system.info.role}}" placeholder="" />
+      </div>
     </div>
   </header>
 
   <div class="dryh-dice-roll-section">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-      <strong style="color:#ff4757; font-size:16px;">Бросок кубов</strong>
-      <div class="dice-formula" id="dice-formula">d6 × {{actor.system.attributes.discipline}} + {{actor.system.attributes.exhaustion}} + {{actor.system.attributes.madness}}</div>
+    <div class="dryh-dice-section-header">
+      <div class="dryh-dice-title">Бросок кубов</div>
+      <div class="dryh-dice-control-label">
+        🎲
+      </div>
     </div>
-    <div class="dryh-dryh-dice-controls">
+    
+    <div class="dryh-dice-formula-container">
+      <div class="dryh-dice-formula">d6 × {{actor.system.attributes.discipline}} + {{actor.system.attributes.exhaustion}} + {{actor.system.attributes.madness}}</div>
+    </div>
+    
+    <div class="dryh-dice-controls">
       <div class="dryh-dice-control">
-        <label for="madness-dice">Доп. кубики Безумия (1-6)</label>
+        <div class="dryh-dice-control-label">
+          Доп. кубики Безумия (1-6)
+        </div>
         <select id="madness-dice" name="madness-dice">
           <option value="0">0</option>
           <option value="1">1</option>
@@ -39,126 +40,165 @@
           <option value="6">6</option>
         </select>
       </div>
+      
       <div class="dryh-dice-control">
-        <label for="exhaustion-dice">Доп. кубик Истощения (0-1)</label>
+        <div class="dryh-dice-control-label">
+          Доп. кубик Истощения (0-1)
+        </div>
         <select id="exhaustion-dice" name="exhaustion-dice">
           <option value="0">0</option>
           <option value="1">1</option>
         </select>
       </div>
-      <button type="button" class="dryh-btn-roll" data-action="roll-dice">Бросить кубы</button>
+      
+      <button type="button" class="dryh-btn-roll" data-action="roll-dice">
+        Бросить кубы
+      </button>
     </div>
   </div>
 
-  <div class="sheet-body">
-    <section class="left-column">
-      <h3>История</h3>
+  <div class="dryh-sheet-body">
+    <section class="dryh-left-column">
+      <div class="dryh-section-header">
+        <div class="dryh-section-icon"></div>
+        <h3 class="dryh-section-title">История</h3>
+      </div>
 
-      <label class="field">
-        <span class="label">Что не дает мне уснуть?</span>
+      <div class="dryh-field-group">
+        <div class="dryh-field-label">
+          Что не дает мне уснуть?
+        </div>
         <textarea name="system.info.whatKeepsMeUp" rows="3">{{actor.system.info.whatKeepsMeUp}}</textarea>
-      </label>
+      </div>
 
-      <label class="field">
-        <span class="label">Что случилось только что?</span>
+      <div class="dryh-field-group">
+        <div class="dryh-field-label">
+          Что случилось только что?
+        </div>
         <textarea name="system.info.whatJustHappened" rows="3">{{actor.system.info.whatJustHappened}}</textarea>
-      </label>
+      </div>
 
-      <label class="field">
-        <span class="label">Какой я снаружи?</span>
+      <div class="dryh-field-group">
+        <div class="dryh-field-label">
+          Какой я снаружи?
+        </div>
         <textarea name="system.info.appearance" rows="3">{{actor.system.info.appearance}}</textarea>
-      </label>
+      </div>
 
-      <label class="field">
-        <span class="label">Кто я на самом деле?</span>
+      <div class="dryh-field-group">
+        <div class="dryh-field-label">
+          Кто я на самом деле?
+        </div>
         <textarea name="system.info.whoIReallyAm" rows="3">{{actor.system.info.whoIReallyAm}}</textarea>
-      </label>
+      </div>
 
-      <label class="field">
-        <span class="label">Каков мой путь?</span>
+      <div class="dryh-field-group">
+        <div class="dryh-field-label">
+          Каков мой путь?
+        </div>
         <textarea name="system.info.path" rows="2">{{actor.system.info.path}}</textarea>
-      </label>
+      </div>
     </section>
 
-    <section class="right-column">
-      <div class="stats">
-        <h3>Характеристики</h3>
+    <section class="dryh-right-column">
+      <div class="dryh-stats-container">
+        <div class="dryh-stat-category">
+          <div class="dryh-stat-category-header">
+            <div class="dryh-section-icon"></div>
+            <h3 class="dryh-stat-category-title">Характеристики</h3>
+          </div>
 
-        <div class="stat-block">
-          <span class="stat-name">Дисциплина</span>
-          <div class="dots">
-            {{#each disciplineBoxes}}
-            <label class="dot">
-              <input type="checkbox" name="disc-box" {{#if this}}checked{{/if}} />
-              <span></span>
-            </label>
-            {{/each}}
+          <div class="dryh-stat-row">
+            <span class="dryh-stat-name">Дисциплина</span>
+            <div class="dryh-dots-container dryh-discipline">
+              {{#each disciplineBoxes}}
+              <label class="dryh-dot">
+                <input type="checkbox" name="disc-box" {{#if this}}checked{{/if}} />
+                <span></span>
+              </label>
+              {{/each}}
+            </div>
+          </div>
+
+          <div class="dryh-stat-row">
+            <span class="dryh-stat-name danger">Безумие</span>
+            <div class="dryh-dots-container dryh-madness">
+              {{#each madnessBoxes}}
+              <label class="dryh-dot">
+                <input type="checkbox" name="mad-box" {{#if this}}checked{{/if}} />
+                <span></span>
+              </label>
+              {{/each}}
+            </div>
+          </div>
+
+          <div class="dryh-stat-row">
+            <span class="dryh-stat-name warning">Истощение</span>
+            <div class="dryh-dots-container dryh-exhaustion">
+              {{#each exhaustionBoxes}}
+              <label class="dryh-dot">
+                <input type="checkbox" name="exh-box" {{#if this}}checked{{/if}} />
+                <span></span>
+              </label>
+              {{/each}}
+            </div>
           </div>
         </div>
 
-        <div class="stat-block">
-          <span class="stat-name">Безумие</span>
-          <div class="dots">
-            {{#each madnessBoxes}}
-            <label class="dot">
-              <input type="checkbox" name="mad-box" {{#if this}}checked{{/if}} />
-              <span></span>
-            </label>
-            {{/each}}
+        <div class="dryh-stat-category">
+          <div class="dryh-stat-category-header">
+            <div class="dryh-section-icon"></div>
+            <h3 class="dryh-stat-category-title">Реакции</h3>
+          </div>
+
+          <div class="dryh-stat-row">
+            <span class="dryh-stat-name">Бей</span>
+            <div class="dryh-dots-container">
+              {{#each hitBoxes}}
+              <label class="dryh-dot">
+                <input type="checkbox" name="hit-box" {{#if this}}checked{{/if}} />
+                <span></span>
+              </label>
+              {{/each}}
+            </div>
+          </div>
+
+          <div class="dryh-stat-row">
+            <span class="dryh-stat-name">Беги</span>
+            <div class="dryh-dots-container">
+              {{#each fleeBoxes}}
+              <label class="dryh-dot">
+                <input type="checkbox" name="flee-box" {{#if this}}checked{{/if}} />
+                <span></span>
+              </label>
+              {{/each}}
+            </div>
           </div>
         </div>
 
-        <div class="stat-block">
-          <span class="stat-name">Истощение</span>
-          <div class="dots exhaustion">
-            {{#each exhaustionBoxes}}
-            <label class="dot">
-              <input type="checkbox" name="exh-box" {{#if this}}checked{{/if}} />
-              <span></span>
-            </label>
-            {{/each}}
+        <div class="dryh-stat-category">
+          <div class="dryh-stat-category-header">
+            <div class="dryh-section-icon"></div>
+            <h3 class="dryh-stat-category-title">Способности</h3>
+          </div>
+          
+          <div class="dryh-skills-container">
+            <div class="dryh-skill-field">
+              <div class="dryh-skill-label">
+                Навык Безумия
+              </div>
+              <input class="dryh-skill-input" name="system.skills.madness" type="text" value="{{actor.system.skills.madness}}" placeholder="Ваши странные таланты..." />
+            </div>
+
+            <div class="dryh-skill-field">
+              <div class="dryh-skill-label">
+                Навык Истощения
+              </div>
+              <input class="dryh-skill-input" name="system.skills.exhaustion" type="text" value="{{actor.system.skills.exhaustion}}" placeholder="Что дает вам силы..." />
+            </div>
           </div>
         </div>
-
-        <h3>Реакции</h3>
-
-        <div class="reaction">
-          <span class="stat-name">Бей</span>
-          <div class="dots">
-            {{#each hitBoxes}}
-            <label class="dot">
-              <input type="checkbox" name="hit-box" {{#if this}}checked{{/if}} />
-              <span></span>
-            </label>
-            {{/each}}
-          </div>
-        </div>
-
-        <div class="reaction">
-          <span class="stat-name">Беги</span>
-          <div class="dots">
-            {{#each fleeBoxes}}
-            <label class="dot">
-              <input type="checkbox" name="flee-box" {{#if this}}checked{{/if}} />
-              <span></span>
-            </label>
-            {{/each}}
-          </div>
-        </div>
-
-        <h3>Способности</h3>
-
-        <label class="field small">
-          <span class="label">Навык Безумия</span>
-          <input name="system.skills.madness" type="text" value="{{actor.system.skills.madness}}" placeholder="Навык Безумия" />
-        </label>
-
-        <label class="field small">
-          <span class="label">Навык Истощения</span>
-          <input name="system.skills.exhaustion" type="text" value="{{actor.system.skills.exhaustion}}" placeholder="Навык Истощения" />
-        </label>
       </div>
     </section>
   </div>
 </form>
-
