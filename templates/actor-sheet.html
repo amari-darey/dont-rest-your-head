@@ -198,6 +198,33 @@
             </div>
           </div>
         </div>
+
+        <div class="dryh-section-header">
+        <div class="dryh-section-icon"></div>
+        <h3 class="dryh-section-title">Шрамы</h3>
+        <button type="button" class="dryh-btn-roll" data-action="add-scar">
+          <span>+</span>
+        </button>
+      </div>
+
+      <div class="dryh-scars-container">
+        {{#if (gt actor.system.scars.length 0)}}
+          {{#each actor.system.scars as |scar index|}}
+            <div class="dryh-scar-item" data-index="{{index}}">
+              <div class="dryh-scar-content">
+                <textarea name="system.scars.{{index}}" rows="2" placeholder="Опишите шрам...">{{scar}}</textarea>
+              </div>
+              <button type="button" class="dryh-btn-remove" data-action="remove-scar" data-index="{{index}}" title="Удалить шрам">
+                <span>×</span>
+              </button>
+            </div>
+          {{/each}}
+        {{else}}
+          <div class="dryh-scars-empty">
+            <p>У вас пока нет шрамов. Нажмите <strong>+</strong> чтобы добавить первый.</p>
+          </div>
+        {{/if}}
+      </div>
       </div>
     </section>
   </div>

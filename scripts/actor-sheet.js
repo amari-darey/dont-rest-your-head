@@ -3,7 +3,7 @@ export default class DryhActorSheet extends ActorSheet {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["dryh", "sheet", "actor", "dryh-sheet"],
       template: "systems/dryh/templates/actor-sheet.html",
-      width: 950,
+      width: 815,
       height: 850,
       resizable: true,
       minimizable: true,
@@ -49,6 +49,34 @@ export default class DryhActorSheet extends ActorSheet {
     html.on("click", ".dryh-awake-status", () => this._startAwakening());
     
     html.on("click", ".avatar", this._onEditImage.bind(this));
+
+    html.on('change', '.dryh-scar-content textarea', async (event) => {
+        const textarea = event.target;
+        const scarItem = $(textarea).closest('.dryh-scar-item');
+        const index = parseInt(scarItem.data('index'));
+        const newText = textarea.value;
+        
+        const newScars = [...(this.actor.system.scars || [])];
+        if (newScars[index] !== undefined) {
+            newScars[index] = newText;
+            await this.actor.update({ "system.scars": newScars });
+        }
+    });
+
+    document.querySelector('.dryh-sheet').addEventListener('click', async (event) => {
+      if (event.target.closest('[data-action="add-scar"]')) {
+          const newScars = [...this.actor.system.scars, ""];
+          await this.actor.update({ "system.scars": newScars });
+      }
+      
+      if (event.target.closest('[data-action="remove-scar"]')) {
+          const button = event.target.closest('[data-action="remove-scar"]');
+          const index = parseInt(button.dataset.index);
+          const newScars = [...this.actor.system.scars];
+          newScars.splice(index, 1);
+          await this.actor.update({ "system.scars": newScars });
+      }
+  });
   }
 
   async _onEditImage(event) {
