@@ -3,7 +3,7 @@ export default class DryhActorSheet extends ActorSheet {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["dryh", "sheet", "actor", "dryh-sheet"],
       template: "systems/dryh/templates/actor-sheet.html",
-      width: 815,
+      width: 800,
       height: 850,
       resizable: true,
       minimizable: true,
@@ -46,7 +46,7 @@ export default class DryhActorSheet extends ActorSheet {
     super.activateListeners(html);
 
     html.on("click", "[data-action='roll-dice']", () => this._rollDice());
-    html.on("click", ".dryh-awake-status", () => this._startAwakening());
+    html.on("click", ".dryh-awake-status-on", () => this._startAwakening());
     
     html.on("click", ".avatar", this._onEditImage.bind(this));
 
@@ -76,7 +76,102 @@ export default class DryhActorSheet extends ActorSheet {
           newScars.splice(index, 1);
           await this.actor.update({ "system.scars": newScars });
       }
-  });
+    });
+    html.find('.dryh-tabs .item').click(this._onTabClick.bind(this));
+    html.on("dblclick", ".dryh-inventory-item", this._onItemDoubleClick.bind(this));
+    this._setupDragAndDrop(html);
+  }
+
+  _setupDragAndDrop(html) {
+    html.on("drop", "form", () => this._onDrop.bind(this));
+    html.on("dragover", "form", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    });
+
+  html.find('.dryh-item-delete').click(this._onItemDelete.bind(this));
+
+  }
+
+  async _onDrop(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    let data;
+    try {
+        data = JSON.parse(event.dataTransfer.getData('text/plain'));
+    } catch (err) {
+        return;
+    }
+    
+    if (data.type === 'Item') {
+        try {
+            const item = await fromUuid(data.uuid);
+            if (!item) return;
+            const itemData = item.toObject();
+            delete itemData._id;
+            
+            await this.actor.createEmbeddedDocuments("Item", [itemData]);
+        } catch (error) {
+            console.error("Ошибка при добавлении предмета:", error);
+        }
+    }
+  }
+
+  async _onItemDoubleClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (event.target.closest && event.target.closest('.dryh-item-delete')) return;
+
+    const el = event.currentTarget || event.target.closest('.dryh-inventory-item');
+    const itemIdRaw = el?.dataset?.itemId || $(el).data('item-id');
+    if (!itemIdRaw) return ui.notifications.warn("Не удалось определить ID предмета.");
+
+    let item = this.actor.items.get(itemIdRaw)
+            || this.actor.items.get(itemIdRaw.replace(/^_/, ''))
+            || this.actor.items.find(i => (i._id === itemIdRaw || i.id === itemIdRaw));
+
+    if (!item) {
+      return ui.notifications.warn("Предмет не найден в инвентаре персонажа.");
+    }
+
+    try {
+      item.sheet.render(true);
+    } catch (err) {
+      console.error("Ошибка при открытии листа предмета:", err);
+      ui.notifications.error("Не удалось открыть лист предмета. Смотрите консоль.");
+    }
+  }
+
+  _onTabClick(event) {
+    event.preventDefault();
+    const tabName = event.currentTarget.dataset.tab;
+    
+    this.element.find('.dryh-tabs .item').removeClass('active');
+    event.currentTarget.classList.add('active');
+    
+    this.element.find('.tab').removeClass('active');
+    this.element.find(`.tab[data-tab="${tabName}"]`).addClass('active');
+  }
+
+  async _onItemDelete(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const itemId = $(event.currentTarget).data("itemId");
+    if (!itemId) return;
+
+    const confirmDelete = await Dialog.confirm({
+      title: "Удалить предмет?",
+      content: "<p>Вы уверены, что хотите удалить этот предмет из инвентаря?</p>"
+    });
+
+    if (!confirmDelete) return;
+
+    await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
+
+    this.render(true);
   }
 
   async _onEditImage(event) {

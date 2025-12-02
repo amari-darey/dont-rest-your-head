@@ -1,11 +1,11 @@
 {
     "Actor": {
         "types": [
-            "Awake",
-            "Nightmares"
+            "Awake"
         ],
         "templates": {
             "commonStats": {
+                "awakened": false,
                 "discipline": {
                     "value": 0,
                     "max": 3
@@ -32,8 +32,8 @@
         "Awake": {
             "templates": ["commonStats"]
         },
-        "Nightmares": {
-            "dice-poll": 0
+        "embedded": {
+            "Item": ["item"]
         }
     },
     "Item": {
@@ -41,7 +41,7 @@
             "item"
         ],
         "item": {
-            "name": "",
+            "img_src": "systems/dryh/assets/defaultItem.png",
             "description": ""
         }
     }
