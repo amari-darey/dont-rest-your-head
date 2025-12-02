@@ -8,7 +8,7 @@
         <input name="name" class="dryh-actor-name" type="text" value="{{actor.name}}" placeholder="Имя персонажа" />
         <div class="{{#if actor.system.awakened }}dryh-awake-status-off{{else}}dryh-awake-status-on{{/if}}" title="Статус бодрствования"></div>
       </div>
-      <div class="dryh-subrole"> И я: {{actor.awakened}}<input name="system.info.role" type="text" value="{{actor.system.info.role}}" placeholder="" />
+      <div class="dryh-subrole"> И я: <input name="system.info.role" type="text" value="{{actor.system.info.role}}" placeholder="" />
       </div>
     </div>
   </header>
@@ -22,7 +22,7 @@
     </div>
     
     <div class="dryh-dice-formula-container">
-      <div class="dryh-dice-formula">d6 × {{actor.system.attributes.discipline}} + {{actor.system.attributes.exhaustion}} + {{actor.system.attributes.madness}}</div>
+      <div class="dryh-dice-formula">d6 × {{actor.system.discipline.value}} + {{actor.system.exhaustion.value}} + {{actor.system.madness.value}}</div>
     </div>
     
     <div class="dryh-dice-controls">

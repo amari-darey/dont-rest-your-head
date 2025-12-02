@@ -6,6 +6,18 @@
         "templates": {
             "commonStats": {
                 "awakened": false,
+                "info": {
+                    "role": "",
+                    "whatKeepsMeUp": "",
+                    "whatJustHappened": "",
+                    "appearance": "",
+                    "whoIReallyAm": "",
+                    "path": ""
+                },
+                "skills": {
+                    "madness": "",
+                    "exhaustion": ""
+                },
                 "discipline": {
                     "value": 0,
                     "max": 3
