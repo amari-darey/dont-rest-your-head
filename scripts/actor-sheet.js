@@ -272,7 +272,7 @@ export default class DryhActorSheet extends ActorSheet {
 
   async _startAwakening() {
     const actor = this.actor;
-    const step = getAwakeStats(
+    const steps = getAwakeStats(
       actor.name,
       actor.system.info.role,
       actor.system.info.whatKeepsMeUp,
@@ -362,7 +362,7 @@ export default class DryhActorSheet extends ActorSheet {
 
   _ask(title, def = "", hint = "", showBackButton = false) {
     return new Promise((resolve, reject) => {
-      const content = getAskHTML();
+      const content = getAskHTML(def, hint);
 
       const buttons = {
         ok: {

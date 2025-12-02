@@ -335,6 +335,10 @@ textarea:focus, input[type="text"]:focus {
     appearance: none;
 }
 
+.dryh-dice-control option {
+    background-color: var(--dryh-bg-tertiary);
+}
+
 .dryh-dice-control select:focus {
     outline: none;
     border-color: var(--dryh-text-primary);
