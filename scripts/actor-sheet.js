@@ -218,9 +218,16 @@ export default class DryhActorSheet extends ActorSheet {
       [discipline, madness + madnessDice, exhaustion + exhaustionDice]
     );
 
-    const totalSuccesses = countSuccesses(disciplineResults) + 
+    var exhaustionHigh = false
+
+    var totalSuccesses = countSuccesses(disciplineResults) + 
                           countSuccesses(madnessResults) + 
                           countSuccesses(exhaustionResults);
+    if (exhaustion > 0 && exhaustion > totalSuccesses) {
+      totalSuccesses = exhaustion > totalSuccesses ? exhaustion : totalSuccesses;
+      exhaustionHigh = true
+    }
+    
 
     const dominantPool = determineDominantPool({
       discipline: { results: disciplineResults, name: "Дисциплина" },
@@ -248,7 +255,8 @@ export default class DryhActorSheet extends ActorSheet {
       dominantPool,
       discipline,
       madness + madnessDice,
-      exhaustion + exhaustionDice
+      exhaustion + exhaustionDice,
+      exhaustionHigh
     );
 
     await ChatMessage.create({

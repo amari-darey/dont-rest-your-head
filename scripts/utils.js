@@ -69,10 +69,10 @@ export const makeDieHtml = (result, style) => `
   </div>
 `;
 
-export const createRollMessageContent = (actorName, formula, diceHtml, totalSuccesses, dominantPool, disciplineCount, madnessCount, exhaustionCount) => {
+export const createRollMessageContent = (actorName, formula, diceHtml, totalSuccesses, dominantPool, disciplineCount, madnessCount, exhaustionCount, exhaustionHigh) => {
   const successText = totalSuccesses === 1 ? 'успех' : 
                      totalSuccesses < 5 ? 'успеха' : 'успехов';
-  
+  console.log(`[DRYH] ${exhaustionHigh}`)
   return `
     <div style="background:linear-gradient(135deg,#1a1a1a 0%,#0d0d0d 100%);padding:15px;border-radius:10px;color:#e0e0e0;font-family:Inter,sans-serif;">
       <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
@@ -86,6 +86,7 @@ export const createRollMessageContent = (actorName, formula, diceHtml, totalSucc
         <strong style="color:#ff4757;font-size:20px;">${totalSuccesses} ${successText}</strong>
         <div style="margin-top:8px;color:#4da6ff;font-size:14px;">Доминирует: ${dominantPool}</div>
       </div>
+      ${exhaustionHigh ? '<div style="margin-top:6px;color:#ffb142;font-size:13px;">Использован малый навык истощения</div>' : ''}
       <div style="display:flex;justify-content:space-around;margin-top:10px;font-size:13px;color:#9e9e9e;">
         <span>Дисциплина: ${disciplineCount}</span>
         <span>Безумие: ${madnessCount}</span>
