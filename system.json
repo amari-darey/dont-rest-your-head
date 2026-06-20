@@ -9,8 +9,7 @@
   "compatibleCoreVersion": "11",
   "esmodules": [
     "scripts/dryhe.js",
-    "scripts/item-sheet.js",
-    "scripts/hope-and-despair.mjs"
+    "scripts/item-sheet.js"
   ],
   "styles": [
     {

@@ -31,6 +31,8 @@ export default class DryhActorSheet extends ActorSheet {
     const data = super.getData();
     const system = data.actor.system;
 
+    data.hopeAndDespair = game.hopeAndDespair
+
     data.disciplineBoxes = makeBoxes(system.discipline.value, system.discipline.max);
     data.madnessBoxes = makeBoxes(system.madness.value, system.madness.max);
     data.exhaustionBoxes = makeBoxes(system.exhaustion.value, system.exhaustion.max);
