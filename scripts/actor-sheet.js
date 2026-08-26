@@ -249,6 +249,25 @@ export default class DryhActorSheet extends ActorSheet {
       await game.dice3d.showForRoll(roll, game.user, !roll.isPrivate, null, false);
     }
 
+  const canAddExhaustion = exhaustionDice === 0;
+
+  const rollData = {
+    actorId: this.actor.id,
+    actorUuid: this.actor.uuid,
+    actorName: this.actor.name,
+    formula,
+    disciplineResults: disciplineResults.map(r => r.result),
+    madnessResults: madnessResults.map(r => r.result),
+    exhaustionResults: exhaustionResults.map(r => r.result),
+    totalSuccesses,
+    dominantPool,
+    disciplineCount: discipline,
+    madnessCount: madness + madnessDice,
+    exhaustionCount: exhaustion + exhaustionDice,
+    exhaustionHigh,
+    canAddExhaustion,
+  };
+
     const messageContent = createRollMessageContent(
       this.actor.name,
       formula,
@@ -266,7 +285,12 @@ export default class DryhActorSheet extends ActorSheet {
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       content: messageContent,
       whisper: roll.isPrivate,
-      sound: CONFIG.sounds.dice
+      sound: CONFIG.sounds.dice,
+      flags: {
+        dryh: {
+          rollData
+        }
+      }
     });
 
     const needsRerender = await handlePostRollUpdates(

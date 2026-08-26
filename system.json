@@ -1,12 +1,17 @@
 {
   "id": "dryh",
-  "name": "dryh",
   "title": "Don't rest your head",
   "description": "You can’t sleep. It started like that for all of us, back when we were garden variety insomniacs. Maybe you had nightmares (God knows we all do now), or maybe you just had problems that wouldn’t let you sleep. Hell, maybe you were just over-caffienated. But then something clicked.",
-  "author": "Amari",
-  "version": 0.01, 
-  "minimumCoreVersion": "11",
-  "compatibleCoreVersion": "11",
+  "authors": [
+    {
+      "name": "Amari"
+    }
+  ],
+  "version": "0.03", 
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
+  },
   "esmodules": [
     "scripts/dryhe.js",
     "scripts/item-sheet.js"
@@ -16,8 +21,10 @@
       "src":"styles/style.css"
     }
   ],
-  "gridDistance": 5,
-  "gridUnits": "ft",
+  "grid": {
+    "distance": 5,
+    "units": "ft"
+  },
   "primaryTokenAttribute": "exhaustion",
   "secondaryTokenAttribute": "madness",
   "initiative": "1d6 + @discipline"

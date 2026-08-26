@@ -72,7 +72,6 @@ export const makeDieHtml = (result, style) => `
 export const createRollMessageContent = (actorName, formula, diceHtml, totalSuccesses, dominantPool, disciplineCount, madnessCount, exhaustionCount, exhaustionHigh) => {
   const successText = totalSuccesses === 1 ? 'успех' : 
                      totalSuccesses < 5 ? 'успеха' : 'успехов';
-  console.log(`[DRYH] ${exhaustionHigh}`)
   return `
     <div style="background:linear-gradient(135deg,#1a1a1a 0%,#0d0d0d 100%);padding:15px;border-radius:10px;color:#e0e0e0;font-family:Inter,sans-serif;">
       <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
@@ -218,7 +217,154 @@ export function getAskHTML(def, hint){
       `
 }
 
-//other
+function prepareRollUpdate(updatedRollData, actor = null) {
+  const baseStyles = getDiceStyles();
+  const diceHtml = [
+    ...updatedRollData.disciplineResults.map(r => makeDieHtml({ result: r }, baseStyles.discipline)),
+    ...updatedRollData.madnessResults.map(r => makeDieHtml({ result: r }, baseStyles.madness)),
+    ...updatedRollData.exhaustionResults.map(r => makeDieHtml({ result: r }, baseStyles.exhaustion))
+  ].join("");
+
+  let totalSuccesses =
+    countSuccesses(updatedRollData.disciplineResults.map(r => ({ result: r }))) +
+    countSuccesses(updatedRollData.madnessResults.map(r => ({ result: r }))) +
+    countSuccesses(updatedRollData.exhaustionResults.map(r => ({ result: r })));
+
+  let exhaustionHigh = updatedRollData.exhaustionHigh;
+  if (updatedRollData.exhaustionCount > 0 && updatedRollData.exhaustionCount > totalSuccesses) {
+    if (actor) {
+      totalSuccesses = actor.system.exhaustion.value;
+    }
+    exhaustionHigh = true;
+  }
+
+  const dominantPool = determineDominantPool({
+    discipline: { results: updatedRollData.disciplineResults.map(r => ({ result: r })), name: "Дисциплина" },
+    madness: { results: updatedRollData.madnessResults.map(r => ({ result: r })), name: "Безумие" },
+    exhaustion: { results: updatedRollData.exhaustionResults.map(r => ({ result: r })), name: "Истощение" }
+  });
+
+  return { diceHtml, totalSuccesses, exhaustionHigh, dominantPool };
+}
+
+export function addHopeToRoll(message, html, rollData) {
+  if (game.hopeAndDespair.hope < 1) return;
+  
+  const buttonHope = $(`
+    <div class="dryh-roll-actions" style="margin-top:8px; display:flex; justify-content:center;">
+      <button type="button" class="dryh-add-exhaustion">
+        добавить 1 в дисциплину (-1 Надежда)
+      </button>
+    </div>
+    `)
+  
+  const content = html.querySelector(".message-content");
+  content?.append(buttonHope[0]);
+
+  let timeoutId = setTimeout(() => {
+      if (buttonHope.length && buttonHope.parent().length) {
+        buttonHope.remove();
+      }
+    }, 180000);
+
+  buttonHope.on("click", async (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    buttonHope.remove();
+
+    game.hopeAndDespair.hope -= 1
+
+    const updatedRollData = foundry.utils.deepClone(rollData);
+    updatedRollData.disciplineResults.push(1);
+
+    const actor = game.actors.get(rollData.actorId);
+    const { diceHtml, totalSuccesses, exhaustionHigh, dominantPool } = prepareRollUpdate(updatedRollData, actor);
+
+    await message.setFlag("dryh", "rollData", updatedRollData);
+
+    await message.update({
+      content: createRollMessageContent(
+        updatedRollData.actorName,
+        updatedRollData.formula,
+        diceHtml,
+        totalSuccesses,
+        dominantPool,
+        updatedRollData.disciplineResults.length,
+        updatedRollData.madnessResults.length,
+        updatedRollData.exhaustionResults.length,
+        exhaustionHigh
+      )
+    });
+  });
+}
+
+export function addExhaustionDice(message, html, rollData) {
+  const buttonExhaustion = $(`
+    <div class="dryh-roll-actions" style="margin-top:8px; display:flex; justify-content:center;">
+      <button type="button" class="dryh-add-exhaustion">
+        +1 куб истощения
+      </button>
+    </div>
+  `);
+
+  const content = html.querySelector(".message-content");
+  content?.append(buttonExhaustion[0]);
+
+  let timeoutId = setTimeout(() => {
+      if (buttonExhaustion.length && buttonExhaustion.parent().length) {
+        buttonExhaustion.remove();
+      }
+    }, 180000);
+
+  buttonExhaustion.on("click", async (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    buttonExhaustion.remove();
+
+    const actor = game.actors.get(rollData.actorId);
+    if (!actor) return ui.notifications.warn("Actor не найден.");
+
+    if (actor.system.exhaustion.value >= actor.system.exhaustion.max) {
+      return ui.notifications.warn("Истощение уже на максимуме.");
+    }
+
+    const extraRoll = new Roll("1d6");
+    await extraRoll.evaluate({ async: true });
+    const extraResult = extraRoll.dice[0].results[0].result;
+
+    const updatedRollData = foundry.utils.deepClone(rollData);
+    updatedRollData.extraExhaustionUsed = true;
+    updatedRollData.exhaustionResults.push(extraResult);
+    updatedRollData.exhaustionCount += 1;
+
+    await actor.update({
+      "system.exhaustion.value": Math.min(actor.system.exhaustion.max, actor.system.exhaustion.value + 1)
+    });
+
+    const { diceHtml, totalSuccesses, exhaustionHigh, dominantPool } = prepareRollUpdate(updatedRollData, actor);
+
+    const canAddExhaustion = false
+
+    await message.setFlag("dryh", "rollData", updatedRollData);
+    await message.setFlag("dryh", "rollData", canAddExhaustion);
+
+    await message.update({
+      content: createRollMessageContent(
+        updatedRollData.actorName,
+        updatedRollData.formula,
+        diceHtml,
+        totalSuccesses,
+        dominantPool,
+        updatedRollData.disciplineResults.length,
+        updatedRollData.madnessResults.length,
+        updatedRollData.exhaustionResults.length,
+        exhaustionHigh
+      )
+    });
+  });
+}
+
 export function getAwakeStats(name, role, whatKeepsMeUp, whatJustHappened, appearance, whoIReallyAm, path, madness, exhaustion) {
     const steps = [
       { field: "name", title: "Твоё имя", hint: "Твоё имя", defaultValue: name },
